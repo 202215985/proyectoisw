@@ -39,7 +39,7 @@ public class ConnectionDAO {
         String password = PropertiesISW.getInstance().getProperty("ddbb.password");
 
         try (Connection con = DriverManager.getConnection(url, user, password);
-			 PreparedStatement pst = con.prepareStatement("SELECT * FROM usuarios");
+			 PreparedStatement pst = con.prepareStatement("SELECT * FROM campos_golf");
 			 ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {

@@ -58,7 +58,7 @@ public class SocketServer extends Thread {
 					customerControler=new CustomerControler();
 					Customer cu=customerControler.getCustomer(id);
 					if (cu!=null){
-						System.out.println("id:"+cu.getId());
+						System.out.println("id:"+cu.getId_campo());
 					}else {
 						System.out.println("No encontrado en la base de datos");
 					}
