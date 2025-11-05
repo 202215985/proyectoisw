@@ -2,7 +2,7 @@ package icai.dtc.isw.domain;
 
 import java.io.Serializable;
 
-public class Customer implements Serializable {
+public class CampoGolf implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id_campo;
@@ -13,7 +13,7 @@ public class Customer implements Serializable {
     private String par;
 
     // Constructor vacío
-    public Customer() {
+    public CampoGolf() {
         this.id_campo = "";
         this.nombre = "";
         this.ubicacion = "";
@@ -23,7 +23,7 @@ public class Customer implements Serializable {
     }
 
     // Constructor con todos los parámetros
-    public Customer(String id_campo, String nombre, String ubicacion, String num_hoyos, String fecha_inauguracion, String par) {
+    public CampoGolf(String id_campo, String nombre, String ubicacion, String num_hoyos, String fecha_inauguracion, String par) {
         this.id_campo = id_campo;
         this.nombre = nombre;
         this.ubicacion = ubicacion;

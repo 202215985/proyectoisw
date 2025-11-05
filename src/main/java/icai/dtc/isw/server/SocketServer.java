@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import icai.dtc.isw.configuration.PropertiesISW;
-import icai.dtc.isw.controler.CustomerControler;
-import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.controler.CamposControler;
+import icai.dtc.isw.domain.CampoGolf;
 import icai.dtc.isw.message.Message;
 
 public class SocketServer extends Thread {
@@ -41,12 +41,12 @@ public class SocketServer extends Thread {
 		    ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
 		    Message mensajeOut=new Message();
 			HashMap<String,Object> session=mensajeIn.getSession();
-			CustomerControler customerControler;
+			CamposControler camposControler;
 		    switch (mensajeIn.getContext()) {
 		    	case "/getCustomers":
-		    		customerControler=new CustomerControler();
-		    		ArrayList<Customer> lista=new ArrayList<Customer>();
-		    		customerControler.getCustomers(lista);
+		    		camposControler=new CamposControler();
+		    		ArrayList<CampoGolf> lista=new ArrayList<CampoGolf>();
+		    		camposControler.getCamposGolf(lista);
 		    		mensajeOut.setContext("/getCustomersResponse");
 		    		//HashMap<String,Object> session=new HashMap<String, Object>();
 		    		session.put("Customers",lista);
@@ -55,8 +55,8 @@ public class SocketServer extends Thread {
 		    		break;
 				case "/getCustomer":
 					int id= (int) session.get("id");
-					customerControler=new CustomerControler();
-					Customer cu=customerControler.getCustomer(id);
+					camposControler=new CamposControler();
+					CampoGolf cu=camposControler.getCustomer(id);
 					if (cu!=null){
 						System.out.println("id:"+cu.getId_campo());
 					}else {

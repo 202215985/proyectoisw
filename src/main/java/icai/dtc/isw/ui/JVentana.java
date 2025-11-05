@@ -1,5 +1,4 @@
 
-//Prueba
 package icai.dtc.isw.ui;
 
 import java.awt.BorderLayout;
@@ -21,7 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import icai.dtc.isw.client.Client;
-import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.domain.CampoGolf;
 
 public class JVentana extends JFrame {
     public static void main(String[] args) {
@@ -99,7 +98,7 @@ public class JVentana extends JFrame {
         String context = "/getCustomer";
         session.put("id", id);
         session = cliente.sentMessage(context, session);
-        Customer cu = (Customer) session.get("Customer");
+        CampoGolf cu = (CampoGolf) session.get("Customer");
         if (cu == null) {
             return "Error - No encontrado en la base de datos";
         } else {

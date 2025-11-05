@@ -10,10 +10,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-
 import icai.dtc.isw.configuration.PropertiesISW;
-import icai.dtc.isw.domain.Customer;
+import icai.dtc.isw.domain.CampoGolf;
 import icai.dtc.isw.message.Message;
 
 public class Client {
@@ -49,14 +47,14 @@ public class Client {
 		
 		switch (mensajeVuelta.getContext()) {
 			case "/getCustomersResponse":
-				ArrayList<Customer> customerList=(ArrayList<Customer>)(mensajeVuelta.getSession().get("Customer"));
-				 for (Customer customer : customerList) {			
-						System.out.println("He leído el id: "+customer.getId_campo()+" con nombre: "+customer.getNombre());
+				ArrayList<CampoGolf> camposList=(ArrayList<CampoGolf>)(mensajeVuelta.getSession().get("Customer"));
+				 for (CampoGolf campo : camposList) {			
+						System.out.println("He leído el id: "+campo.getId_campo()+" con nombre: "+campo.getNombre());
 					} 
 				break;
 			case "/getCustomerResponse":
 				session=mensajeVuelta.getSession();
-				Customer customer =(Customer) (session.get("Customer"));
+				CampoGolf customer =(CampoGolf) (session.get("Customer"));
 				if (customer!=null) {
 					System.out.println("He leído el id: " + customer.getId_campo() + " con nombre: " + customer.getNombre());
 				}else {
