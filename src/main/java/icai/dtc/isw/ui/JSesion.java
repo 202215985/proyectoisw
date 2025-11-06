@@ -4,9 +4,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import icai.dtc.isw.dao.ConnectionDAO;
+import icai.dtc.isw.dao.CustomerDAO;
 import icai.dtc.isw.domain.Usuario;
 
 public class JSesion extends JFrame {
@@ -29,13 +26,14 @@ public class JSesion extends JFrame {
     private CardLayout cardLayout;
 
     public JSesion() {
-        setTitle("Inicio / Registro de Usuario");
-        setSize(400, 350);
+        setTitle("HoleIn1cai");
+        setSize(450, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+        mainPanel = new JFondo("/fondo.jpg");
+        mainPanel.setLayout(cardLayout);
 
         // ===== PANEL MENÚ =====
         menuPanel = new JPanel(new GridBagLayout());
@@ -43,11 +41,12 @@ public class JSesion extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel lblTitulo = new JLabel("Bienvenido", SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel("HoleIn1cai", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
 
         JButton btnLogin = new JButton("Iniciar Sesión");
         JButton btnRegistro = new JButton("Registrarse");
+        JButton btnInfoCampos = new JButton("Información de campos");
 
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         menuPanel.add(lblTitulo, gbc);
@@ -58,6 +57,14 @@ public class JSesion extends JFrame {
 
         gbc.gridy++;
         menuPanel.add(btnRegistro, gbc);
+
+        gbc.gridy++;
+        menuPanel.add(btnInfoCampos, gbc);
+
+        // PANEL INFO CAMPOS
+
+        JVentana panelCampos = new JVentana(this);
+
 
         // ===== PANEL LOGIN =====
         loginPanel = new JPanel(new GridBagLayout());
@@ -120,6 +127,8 @@ public class JSesion extends JFrame {
 
         JButton btnVolverRegistro = new JButton("Volver");
         JButton btnRegistrar = new JButton("Registrar");
+        
+
 
         gr.gridx = 0; gr.gridy = 0; gr.gridwidth = 2;
         registroPanel.add(lblRegTitulo, gr);
@@ -152,9 +161,14 @@ public class JSesion extends JFrame {
         registroPanel.add(btnVolverRegistro, gr);
 
         // ===== AÑADIR LOS PANELES =====
+        
         mainPanel.add(menuPanel, "menu");
         mainPanel.add(loginPanel, "login");
         mainPanel.add(registroPanel, "registro");
+        mainPanel.add(panelCampos, "campos");
+        menuPanel.setOpaque(false);
+        loginPanel.setOpaque(false);
+        registroPanel.setOpaque(false);
 
         add(mainPanel);
 
@@ -163,6 +177,7 @@ public class JSesion extends JFrame {
         btnRegistro.addActionListener(e -> cardLayout.show(mainPanel, "registro"));
         btnVolverLogin.addActionListener(e -> cardLayout.show(mainPanel, "menu"));
         btnVolverRegistro.addActionListener(e -> cardLayout.show(mainPanel, "menu"));
+        btnInfoCampos.addActionListener(e -> cardLayout.show(mainPanel, "campos"));
         
         // Acción de registro → crea el objeto Usuario y lo guarda en BD
         btnRegistrar.addActionListener(e -> {
@@ -177,11 +192,23 @@ public class JSesion extends JFrame {
                 return;
             }
 
+            CustomerDAO cu = new CustomerDAO();
+
+            Usuario existente = cu.getCliente(dni);
+            if (existente != null) {
+            JOptionPane.showMessageDialog(this,
+                "⚠️ Este usuario ya tiene una cuenta.\nPor favor, inicia sesión.",
+                "Usuario existente",
+                JOptionPane.WARNING_MESSAGE);
+            cardLayout.show(mainPanel, "login");  // Lo lleva al login
+            return;
+            }
+
             // Crear el objeto Usuario
             Usuario nuevo = new Usuario(dni, nombre, apellidos, correo);
 
             // Guardar en base de datos
-            setCliente(nuevo);
+            cu.setCliente(nuevo);
 
             JOptionPane.showMessageDialog(this, "✅ Usuario registrado correctamente.");
             cardLayout.show(mainPanel, "menu");
@@ -194,34 +221,12 @@ public class JSesion extends JFrame {
         });
     }
 
-    // =====================================================
-    // MÉTODO PARA GUARDAR USUARIO EN LA BASE DE DATOS
-    // =====================================================
-    public void setCliente(Usuario usu) {
-        Connection con = ConnectionDAO.getInstance().getConnection();
-        String insertar = "INSERT INTO usuarios (dni, nombre, apellidos, correo) VALUES (?, ?, ?, ?)";
-
-        try (PreparedStatement pst = con.prepareStatement(insertar)) {
-            pst.setString(1, usu.getDni());
-            pst.setString(2, usu.getNombre());
-            pst.setString(3, usu.getApellidos());
-            pst.setString(4, usu.getCorreo());
-
-            int filas = pst.executeUpdate();
-
-            if (filas > 0) {
-                System.out.println("Usuario insertado correctamente en la base de datos.");
-            } else {
-                System.out.println("No se pudo insertar el usuario.");
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("Error al insertar el usuario: " + ex.getMessage());
-        }
+    public void mostrarMenu() {
+        cardLayout.show(mainPanel, "menu");
     }
-        
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new JSesion().setVisible(true));
     }
+    
 }

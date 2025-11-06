@@ -25,14 +25,14 @@ public class CustomerDAO {
         }
 
 	}
-	public Usuario getCliente(int id) {
+	public Usuario getCliente(String dni) {
 		Connection con=ConnectionDAO.getInstance().getConnection();
 		Usuario cu=null;
 		String consulta = "SELECT * FROM usuarios WHERE dni = ?";
 
 		try (PreparedStatement pst = con.prepareStatement(consulta)) {
 			// Asignar el valor del parámetro
-			pst.setInt(1, id);  // El primer parámetro "?" se reemplaza por el valor de 'id'
+			pst.setString(1, dni);  // El primer parámetro "?" se reemplaza por el valor de 'id'
 
 			try (ResultSet rs = pst.executeQuery()) {
 				// Procesar el resultado
