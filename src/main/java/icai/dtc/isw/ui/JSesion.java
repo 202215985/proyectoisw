@@ -61,6 +61,10 @@ public class JSesion extends JFrame {
         gbc.gridy++;
         menuPanel.add(btnInfoCampos, gbc);
 
+        // PANEL INICIO DE SESION
+
+        
+
         // PANEL INFO CAMPOS
 
         JVentana panelCampos = new JVentana(this);
@@ -219,6 +223,38 @@ public class JSesion extends JFrame {
             txtDniR.setText("");
             txtCorreoR.setText("");
         });
+        
+        // Acción de login → comprueba que esta en BD y abre perfil de usuario
+        btnEntrar.addActionListener(e -> {
+            String dni = txtDni.getText().trim();
+            String correo = txtCorreo.getText().trim();
+            
+            if (dni.isEmpty() || correo.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, rellena todos los campos.");
+                return;
+            }
+
+            CustomerDAO cu = new CustomerDAO();
+
+            Usuario existente = cu.getCliente(dni);
+            if (existente != null) {
+                JUsuario panelUsuario = new JUsuario(this, existente);
+                mainPanel.add(panelUsuario, "usuario");
+                cardLayout.show(mainPanel, "usuario"); 
+            }
+            else{
+                JOptionPane.showMessageDialog(this,
+                "⚠️ Este usuario no existe.\nPor favor, registrate para iniciar sesion.",
+                "Usuario inexistente",
+                JOptionPane.WARNING_MESSAGE);
+            cardLayout.show(mainPanel, "registro");  // Lo lleva al registro
+            return;
+            }
+
+
+
+        });
+
     }
 
     public void mostrarMenu() {

@@ -12,7 +12,7 @@ public class Usuario implements Serializable {
 
 
     // Constructor con todos los parámetros
-    public Usuario(String dni, String nombre, String apellidos, String correo) {
+    public Usuario(String nombre, String apellidos, String correo, String dni) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellidos = apellidos;
